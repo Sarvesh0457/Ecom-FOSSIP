@@ -1,0 +1,91 @@
+.signup-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  /* Replace with your image */
+  background: url("/yellow-bg.png") center center/cover no-repeat;
+}
+
+.signup-card {
+  width: 470px;
+  min-height: 605px;
+  background: #f2f2f2;
+  border-radius: 16px;
+  padding: 22px 42px;
+}
+
+.signup-card h1 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #000;
+  margin-bottom: 18px;
+}
+
+.input-field {
+  width: 100%;
+  height: 50px;
+  border: 1px solid #c9c9c9;
+  background: #f8f8f8;
+  outline: none;
+  padding: 0 24px;
+  margin-bottom: 12px;
+  font-size: 17px;
+  color: #555;
+}
+
+.input-field::placeholder {
+  color: #a3a3a3;
+}
+
+.terms-section {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 6px 0 25px;
+}
+
+.terms-section input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin-top: 4px;
+  cursor: pointer;
+}
+
+.terms-section p {
+  color: #707070;
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+.continue-btn {
+  width: 90%;
+  height: 46px;
+  display: block;
+  margin: auto;
+  border: none;
+  border-radius: 15px;
+  background: #bfd400;
+  color: white;
+  font-size: 22px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.continue-btn:hover {
+  background: #acc000;
+}
+
+.help-text {
+  text-align: center;
+  margin-top: 48px;
+  color: #9b9b9b;
+  font-size: 14px;
+}
+
+.help-text span {
+  color: #ff2d2d;
+  cursor: pointer;
+}

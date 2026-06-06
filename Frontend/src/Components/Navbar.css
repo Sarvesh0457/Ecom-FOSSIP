@@ -1,0 +1,176 @@
+.top {
+  background-color: #383636;
+  height: 28px;
+  display: flex;
+  justify-content: center;
+}
+
+.top-content {
+  width: 80vw;
+  max-width: 1200px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.top-content a {
+  color: white;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+}
+
+.top-content img {
+  height: 18px;
+  margin-right: 5px;
+}
+
+.navline {
+  max-width: 80vw;
+  margin: 10px auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 2rem;
+}
+
+.logo a {
+  text-decoration: none;
+  color: black;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.nav-items {
+  display: flex;
+  align-items: center;
+  gap: 35px;
+}
+
+.nav-items a {
+  text-decoration: none;
+  color: black;
+  font-size: 17px;
+  white-space: nowrap;
+  transition: 0.2s ease;
+}
+
+.nav-items a:hover {
+  color: #bdd200;
+}
+
+.search {
+  flex: 1 1 200px;
+  min-width: 100px;
+  max-width: 400px;
+  display: flex;
+  justify-content: center;
+}
+.user-details {
+  display: flex;
+  align-items: center;
+  gap: 2vw;
+}
+
+.profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.profile:hover {
+  transform: translateY(-2px);
+}
+
+.profile img {
+  height: 22px;
+}
+
+.profile p {
+  margin-top: 3px;
+  font-size: 13px;
+}
+
+/* Hamburger hidden on desktop */
+
+.mobile-menu {
+  display: none;
+}
+
+.mobile-menu img {
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+}
+
+/* Mobile Menu Dropdown */
+
+.mobile-nav {
+  display: none;
+}
+
+/* Tablet */
+
+@media (max-width: 992px) {
+  .nav-items {
+    display: none;
+  }
+
+  .search {
+    max-width: 300px;
+  }
+
+  .mobile-menu {
+    display: block;
+  }
+}
+
+/* Mobile */
+
+@media (max-width: 800px) {
+  .navline {
+    gap: 10px;
+  }
+
+  .mobile-menu {
+    display: block;
+    order: 1;
+  }
+
+  .logo {
+    order: 2;
+  }
+
+  .search {
+    display: none;
+  }
+
+  .user-details {
+    order: 3;
+    gap: 15px;
+  }
+
+  .profile p {
+    display: none;
+  }
+
+  .mobile-nav {
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    gap: 15px;
+    border-top: 1px solid #ddd;
+    background: white;
+  }
+
+  .mobile-nav a {
+    text-decoration: none;
+    color: black;
+    font-size: 18px;
+  }
+}
