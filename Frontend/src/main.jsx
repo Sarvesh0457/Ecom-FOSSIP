@@ -8,6 +8,7 @@ import Explore from "./pages/Explore.jsx";
 import Login from "./pages/Login.jsx";
 import Signup from "./pages/Signup.jsx";
 import Wishlist from "./pages/Wishlist.jsx";
+import { AuthProvider } from "./AuthContext.jsx"; // Restored your auth logic state
 
 const router = createBrowserRouter([
   {
@@ -40,6 +41,9 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    {/* Restored AuthProvider wrap here so everything works */}
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </StrictMode>,
 );

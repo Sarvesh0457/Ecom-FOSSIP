@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../AuthContext"; // Restored your AuthContext connection
 import "./Navbar.css";
 
 import loc from "../Assets/location_on.png";
@@ -9,7 +10,6 @@ import cart from "../Assets/Shopping cart.png";
 import menu from "../Assets/menu.png";
 
 import Searchbar from "./Searchbar";
-import { getCurrentUser } from "../api/user"; // ✅ API call
 
 const menuItems = [
   { name: "HOME", path: "/" },
@@ -21,25 +21,10 @@ const menuItems = [
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-
-    if (!token) return;
-
-    const fetchUser = async () => {
-      try {
-        const res = await getCurrentUser(token);
-        setUser(res.data?.data || null);
-      } catch (err) {
-        console.log("User not logged in");
-        setUser(null);
-      }
-    };
-
-    fetchUser();
-  }, []);
+  
+  // Cleaned up their redundant local state + useEffect fetch loops 
+  // and attached it directly to your real app authentication context.
+  const { user, logout } = useContext(AuthContext);
 
   return (
     <>
@@ -74,6 +59,7 @@ const Navbar = () => {
         </div>
 
         <div className="user-details">
+          {/* Replaced user.username with your correct schema field user.name */}
           <Link
             to={user ? "/profile" : "/login"}
             style={{
@@ -83,9 +69,23 @@ const Navbar = () => {
           >
             <div className="profile">
               <img src={profile} alt="profile" />
-              <p>{user ? user.username : "Profile"}</p>
+              <p>{user ? user.name : "Login / Signup"}</p>
             </div>
           </Link>
+
+          {/* Conditional logout button using their exact layout block architecture */}
+          {user && (
+            <div 
+              className="profile" 
+              onClick={logout} 
+              style={{ cursor: "pointer" }}
+              title="Click to logout"
+            >
+              <span style={{ fontSize: "12px", fontWeight: "bold", color: "#ff4d4d" }}>
+                LOGOUT
+              </span>
+            </div>
+          )}
 
           <Link to="/wishlist">
             <div className="profile">
@@ -104,7 +104,7 @@ const Navbar = () => {
       {menuOpen && (
         <div className="mobile-nav">
           {menuItems.map((item) => (
-            <Link key={item.name} to={item.path}>
+            <Link key={item.name} to={item.path} onClick={() => setMenuOpen(false)}>
               {item.name}
             </Link>
           ))}
