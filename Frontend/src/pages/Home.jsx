@@ -23,14 +23,27 @@ import heartRed from "../Assets/red-heart.png";
 
 const LOCAL_PRODUCTS = [
   {
-    id: 1,
+    _id: "60d21b4667d0d8992e610c81", // Valid MongoDB ID format
     name: "Baggie Jeans",
     image: jean1,
     category: "Latest Product",
     discount: "30% OFF",
+    price: 1500 // Make sure you have a price for the cart math!
   },
-  { id: 2, name: "Straight Jeans", image: jean2, category: "Best Sellers" },
-  { id: 3, name: "Baggie Jeans", image: jean3, category: "Trendy" },
+  { 
+    _id: "60d21b4667d0d8992e610c82", 
+    name: "Straight Jeans", 
+    image: jean2, 
+    category: "Best Sellers",
+    price: 1200
+  },
+  { 
+    _id: "60d21b4667d0d8992e610c83", 
+    name: "Baggie Jeans", 
+    image: jean3, 
+    category: "Trendy",
+    price: 1800
+  },
 ];
 
 const features = [
@@ -182,31 +195,43 @@ function Home() {
   // ── Add to Cart ──────────────────────────────────────────────────────────────────────────────────
 
   const handleAddToCart = async (product) => {
+    // 1. SECURITY CHECK: Ensure they are logged in before they can buy something!
+    if (!user) {
+      alert("Please login to add items to your cart!");
+      navigate("/login");
+      return; 
+    }
+
     if (cartLoading) return;
-
-    const currentQty =
-      cart.find((item) => item.id === product.id)?.quantity ?? 0;
-
-    setCart((prev) => {
-      const existing = prev.find((item) => item.id === product.id);
-      if (existing) {
-        return prev.map((item) =>
-          item.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item,
-        );
-      }
-      return [...prev, { ...product, quantity: 1 }];
-    });
 
     try {
       setCartLoading(true);
-      await axios.post(`${API_URL}/cart`, {
-        productId: product.id,
-        quantity: currentQty + 1,
-      });
+      
+      // Grab the secure token from local storage
+      const token = localStorage.getItem("accessToken");
+      
+      // Handle both MongoDB products (_id) and your hardcoded LOCAL_PRODUCTS (id)
+      const productId = product._id || product.id;
+
+      // Send it to the secure backend route we just built!
+      await axios.post(
+        `${API_URL}/v1/cart/add`, 
+        { 
+          productId: productId,
+          quantity: 1 
+        },
+        {
+          withCredentials: true,
+          headers: { Authorization: `Bearer ${token}` }
+        }
+      );
+      
+      alert("Added to cart! 🛒"); // Optional: Let the user know it worked!
+      
     } catch (err) {
       console.error("Cart error:", err);
+      const backendError = err.response?.data?.message || err.message;
+      alert(`Backend rejected it: ${backendError}`);
     } finally {
       setCartLoading(false);
     }
@@ -387,37 +412,58 @@ function Home() {
         ) : (
           <div className="products-grid">
             {filteredProducts.map((product) => (
-              <div className="product-card" key={product.id}>
+              <div className="product-card" key={product._id || product.id} style={{ display: 'flex', flexDirection: 'column', padding: '15px', background: '#fff', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+                
                 {product.discount && (
-                  <div className="discount-badge">{product.discount}</div>
+                  <div className="discount-badge" style={{ position: 'absolute', background: 'red', color: 'white', padding: '2px 8px', borderRadius: '4px', fontSize: '12px' }}>
+                    {product.discount}
+                  </div>
                 )}
-                <div className="product-actions">
-                  <button
-                    className={`action-btn ${wishlist.includes(product.id) ? "active" : ""}`}
-                    onClick={() => handleWishlist(product.id)}
-                    disabled={wishlistLoading}
-                    aria-label="Toggle wishlist"
-                  >
-                    <img
-                      src={wishlist.includes(product.id) ? heartRed : heart}
-                      alt="wishlist"
-                    />
-                  </button>
-                  <button
-                    className="action-btn"
-                    onClick={() => handleAddToCart(product)}
-                    disabled={cartLoading}
-                    aria-label="Add to cart"
-                  >
-                    <img src={cartIcon} alt="cart" />
-                  </button>
-                </div>
+                
+                {/* 1. Heart Button in the Top Right Corner */}
+                <button
+                  className={`action-btn ${wishlist.includes(product._id || product.id) ? "active" : ""}`}
+                  onClick={() => handleWishlist(product._id || product.id)}
+                  disabled={wishlistLoading}
+                  style={{ alignSelf: 'flex-end', background: 'none', border: 'none', cursor: 'pointer', fontSize: '20px' }}
+                  title="Add to Wishlist"
+                >
+                  {wishlist.includes(product._id || product.id) ? "❤️" : "🤍"}
+                </button>
+
+                {/* 2. Product Image */}
                 <img
-                  src={product.image}
+                  src={product.image || product.imageUrl}
                   alt={product.name}
                   className="product-image"
+                  style={{ width: '100%', height: '200px', objectFit: 'contain', marginBottom: '15px' }}
                 />
-                <h3>{product.name}</h3>
+                
+                {/* 3. Product Info */}
+                <h3 style={{ margin: '0 0 5px 0', fontSize: '18px' }}>{product.name}</h3>
+                <strong style={{ fontSize: '16px', marginBottom: '15px' }}>₹{product.price}</strong>
+
+                {/* 4. The BIG Add to Cart Button */}
+                <button
+                  onClick={() => handleAddToCart(product)}
+                  disabled={cartLoading}
+                  style={{
+                    width: '100%',
+                    padding: '10px',
+                    background: '#000',
+                    color: '#fff',
+                    border: 'none',
+                    borderRadius: '4px',
+                    fontWeight: 'bold',
+                    cursor: 'pointer',
+                    marginTop: 'auto', // Pushes button to the bottom of the card
+                    transition: 'background 0.3s'
+                  }}
+                  onMouseOver={(e) => e.target.style.background = '#333'}
+                  onMouseOut={(e) => e.target.style.background = '#000'}
+                >
+                  {cartLoading ? "Adding..." : "Add to Cart 🛒"}
+                </button>
               </div>
             ))}
           </div>

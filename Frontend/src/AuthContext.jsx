@@ -5,8 +5,18 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   // Check for 'accessToken' to match our Login/Signup logic
   const initialToken = localStorage.getItem('accessToken') || localStorage.getItem('token') || null;
+
+  // 1. ADD THIS: Safely and instantly grab the user before the page loads
+  const getInitialUser = () => {
+    try {
+      const savedUser = localStorage.getItem('user');
+      return savedUser ? JSON.parse(savedUser) : null;
+    } catch {
+      return null;
+    }
+  };
   
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(getInitialUser());
   const [token, setToken] = useState(initialToken);
 
   useEffect(() => {

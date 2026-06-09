@@ -94,10 +94,12 @@ const Navbar = () => {
             </div>
           </Link>
 
-          <div className="profile">
-            <img src={cart} alt="cart" />
-            <p>Cart</p>
-          </div>
+          <Link to="/cart">
+            <div className="profile">
+              <img src={cart} alt="cart" />
+              <p>Cart</p>
+            </div>
+          </Link>
         </div>
       </nav>
 

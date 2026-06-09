@@ -8,6 +8,7 @@ import Explore from "./pages/Explore.jsx";
 import Login from "./pages/Login.jsx";
 import Signup from "./pages/Signup.jsx";
 import Wishlist from "./pages/Wishlist.jsx";
+import Cart from "./pages/Cart.jsx";
 import { AuthProvider } from "./AuthContext.jsx"; // Restored your auth logic state
 
 const router = createBrowserRouter([
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
       {
         path: "wishlist",
         element: <Wishlist />,
+      },
+      {
+        path: "cart",
+        element: <Cart />,
       },
     ],
   },
