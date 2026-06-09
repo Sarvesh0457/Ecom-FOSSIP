@@ -4,6 +4,7 @@ import userRouter from "./routes/user.routes.js";
 import authRouter from "./routes/auth.routes.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import productRouter from "./routes/product.routes.js";
 
 import express from "express";
 const app = express();
@@ -25,6 +26,7 @@ app.use(
 //Routes
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/products", productRouter);
 
 //connection
 connectDB()

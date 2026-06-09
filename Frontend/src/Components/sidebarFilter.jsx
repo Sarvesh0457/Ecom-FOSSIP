@@ -65,6 +65,12 @@ function FilterSidebar({
       {/* PRICE */}
       <section className="filter-block">
         <h3>PRICE</h3>
+        
+        {/* ADDED THIS: Display the actual numbers above the slider */}
+        <div className="price-display" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px', fontWeight: 'bold' }}>
+          <span>₹{minPrice}</span>
+          <span>₹{maxPrice}</span>
+        </div>
 
         <div className="price-slider">
           <div className="price-track"></div>
