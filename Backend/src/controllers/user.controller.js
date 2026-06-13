@@ -14,30 +14,41 @@ const getCurrentUser = asyncHandler(async (req, res) => {
 // UPDATE PROFILE (NOT PASSWORD) ------------------------
 
 const updateProfile = asyncHandler(async (req, res) => {
-  const { username, fullName, phoneNumber, address } = req.body;
+  try {
+    const { fullName, phoneNumber, address } = req.body;
 
-  const user = await User.findById(req.user._id);
+    const user = await User.findById(req.user._id);
 
-  if (!user) {
-    throw new ApiError(404, "User not found");
+    if (!user) {
+      throw new ApiError(404, "User not found");
+    }
+
+    if (fullName) user.fullName = fullName;
+    if (phoneNumber) user.phoneNumber = phoneNumber;
+
+    if (address) {
+      user.address = {
+        ...user.address,
+        ...address,
+      };
+    }
+
+    await user.save({ validateBeforeSave: false });
+
+    return res
+      .status(200)
+      .json(new ApiResponse(200, user, "Profile updated successfully"));
+  } catch (error) {
+    // 🚨 HANDLE DUPLICATE PHONE NUMBER ERROR
+    if (error.code === 11000 && error.keyPattern?.phoneNumber) {
+      return res.status(400).json({
+        success: false,
+        message: "Phone number already exists",
+      });
+    }
+
+    throw error;
   }
-
-  if (username) user.username = username;
-  if (fullName) user.fullName = fullName;
-  if (phoneNumber) user.phoneNumber = phoneNumber;
-
-  if (address) {
-    user.address = {
-      ...user.address,
-      ...address,
-    };
-  }
-
-  await user.save({ validateBeforeSave: false });
-
-  return res
-    .status(200)
-    .json(new ApiResponse(200, user, "Profile updated successfully"));
 });
 
 // DELETE OWN ACCOUNT ------------------------

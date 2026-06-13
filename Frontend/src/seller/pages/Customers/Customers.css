@@ -1,0 +1,263 @@
+/* Customers Page Styles */
+
+.customers-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.customers-header {
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 1.5rem;
+}
+
+.customers-header h1 {
+  font-size: 1.875rem;
+  font-weight: 900;
+  color: #0f172a;
+  margin-bottom: 0.5rem;
+}
+
+.customers-header p {
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+.customers-filter {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.customers-search {
+  flex: 1;
+  min-width: 250px;
+}
+
+.customers-status-filter {
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid #e2e8f0;
+  background-color: #f8fafc;
+  color: #475569;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.customers-status-filter:focus {
+  outline: none;
+  ring: 1px solid #22c55e;
+}
+
+.customers-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.customers-table thead {
+  background-color: #f1f5f9;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.customers-table th {
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  color: #475569;
+  font-size: 0.875rem;
+}
+
+.customers-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.customers-table tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+.customers-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.customers-status.active {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.customers-status.inactive {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.customers-action-btn {
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.375rem;
+  border: 1px solid #e2e8f0;
+  background-color: transparent;
+  color: #0f172a;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.customers-action-btn:hover {
+  background-color: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.customers-pagination {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.customers-pagination button {
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.375rem;
+  border: 1px solid #e2e8f0;
+  background-color: transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.customers-pagination button:hover:not(:disabled) {
+  background-color: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.customers-pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.customers-pagination button.active {
+  background-color: #22c55e;
+  color: white;
+  border-color: #16a34a;
+}
+
+/* Drawer Styles */
+.customers-drawer {
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 400px;
+  max-width: 100%;
+  height: 100vh;
+  background-color: white;
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  overflow-y: auto;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.customers-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+  .customers-header {
+    border-bottom-color: #334155;
+  }
+
+  .customers-header h1 {
+    color: #f8fafc;
+  }
+
+  .customers-header p {
+    color: #94a3b8;
+  }
+
+  .customers-status-filter {
+    background-color: #1e293b;
+    color: #cbd5e1;
+    border-color: #334155;
+  }
+
+  .customers-table thead {
+    background-color: #1e293b;
+    border-bottom-color: #334155;
+  }
+
+  .customers-table th {
+    color: #94a3b8;
+  }
+
+  .customers-table td {
+    border-bottom-color: #334155;
+  }
+
+  .customers-table tbody tr:hover {
+    background-color: #0f172a;
+  }
+
+  .customers-action-btn {
+    background-color: transparent;
+    color: #f8fafc;
+    border-color: #334155;
+  }
+
+  .customers-action-btn:hover {
+    background-color: #1e293b;
+    border-color: #475569;
+  }
+
+  .customers-drawer {
+    background-color: #0f172a;
+  }
+
+  .customers-drawer-overlay {
+    background-color: rgba(0, 0, 0, 0.75);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .customers-drawer {
+    width: 100%;
+  }
+
+  .customers-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .customers-filter {
+    flex-direction: column;
+  }
+
+  .customers-search {
+    min-width: unset;
+  }
+}

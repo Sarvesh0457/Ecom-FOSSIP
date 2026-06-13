@@ -8,6 +8,7 @@ import {
   deleteProduct,
   updateProduct,
   getProducts,
+  SingleProductById,
 } from "../controllers/product.controller.js";
 
 const router = Router();
@@ -30,5 +31,8 @@ router.delete(
   getProductById,
   deleteProduct,
 );
+
+// GET single product
+router.get("/:id", SingleProductById);
 
 export default router;

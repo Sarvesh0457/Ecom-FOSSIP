@@ -154,9 +154,7 @@ const getProducts = asyncHandler(async (req, res) => {
   }
 
   const products = await Product.find(query);
-  console.log(query);
-  console.log("pfood");
-  // console.log(products);
+
   const filters = {
     categories: await Product.distinct("category", query),
     brands: await Product.distinct("brand", query),
@@ -176,4 +174,24 @@ const getProducts = asyncHandler(async (req, res) => {
   );
 });
 
-export { createProduct, deleteProduct, updateProduct, getProducts };
+const SingleProductById = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const product = await Product.findById(id);
+
+  if (!product) {
+    throw new ApiError(404, "Product not found");
+  }
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, product, "Product fetched successfully"));
+});
+
+export {
+  createProduct,
+  deleteProduct,
+  updateProduct,
+  getProducts,
+  SingleProductById,
+};

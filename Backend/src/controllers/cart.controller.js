@@ -5,7 +5,11 @@ import { ApiResponse } from "../utils/api-response.js";
 import { asyncHandler } from "../utils/async-handler.js";
 
 const addToCart = asyncHandler(async (req, res) => {
-  const { productId, quantity, size, color } = req.body;
+  const { productId, quantity = 1, size, color } = req.body;
+
+  if (!productId) {
+    throw new ApiError(400, "productId is required");
+  }
 
   const product = await Product.findById(productId);
 
@@ -13,16 +17,16 @@ const addToCart = asyncHandler(async (req, res) => {
     throw new ApiError(404, "Product not found");
   }
 
+  // find existing cart item
   const existingItem = await Cart.findOne({
     user: req.user._id,
     product: productId,
-    size,
-    color,
+    size: size || null,
+    color: color || null,
   });
 
   if (existingItem) {
-    existingItem.quantity += quantity || 1;
-
+    existingItem.quantity += quantity;
     await existingItem.save();
 
     return res
@@ -30,13 +34,17 @@ const addToCart = asyncHandler(async (req, res) => {
       .json(new ApiResponse(200, existingItem, "Cart updated successfully"));
   }
 
-  const cartItem = await Cart.create({
+  // clean payload (IMPORTANT)
+  const payload = {
     user: req.user._id,
     product: productId,
-    quantity: quantity || 1,
-    size,
-    color,
-  });
+    quantity,
+  };
+
+  if (size) payload.size = size;
+  if (color) payload.color = color;
+
+  const cartItem = await Cart.create(payload);
 
   return res
     .status(201)
@@ -94,9 +102,25 @@ const updateCartItem = asyncHandler(async (req, res) => {
     throw new ApiError(403, "Unauthorized");
   }
 
+  // remove item if quantity becomes 0
+  if (quantity <= 0) {
+    await cartItem.deleteOne();
+
+    return res
+      .status(200)
+      .json(new ApiResponse(200, {}, "Item removed from cart"));
+  }
+
   cartItem.quantity = quantity;
-  cartItem.size = size;
-  cartItem.color = color;
+
+  // update only if provided
+  if (size) {
+    cartItem.size = size;
+  }
+
+  if (color) {
+    cartItem.color = color;
+  }
 
   await cartItem.save();
 
