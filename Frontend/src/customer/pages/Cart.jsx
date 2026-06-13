@@ -2,9 +2,12 @@ import { Link } from "react-router-dom";
 import { useShop } from "../context/useShop";
 import "./ShopPages.css";
 
+import { useNavigate } from "react-router-dom";
+
 function Cart() {
   const { cartItems, clearCart, removeFromCart, updateCartQuantity } =
     useShop();
+  const navigate = useNavigate();
 
   const getSubtotal = () => {
     return cartItems.reduce((acc, item) => {
@@ -126,7 +129,12 @@ function Cart() {
             <strong>Rs. {orderTotal}</strong>
           </div>
 
-          <button className="primary-shop-btn">Place Order</button>
+          <button
+            className="primary-shop-btn"
+            onClick={() => navigate("/payment")}
+          >
+            Place Order
+          </button>
 
           <button className="clear-cart-btn" onClick={clearCart}>
             Clear Cart

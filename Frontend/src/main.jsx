@@ -12,6 +12,7 @@ import Home from "./customer/pages/Home.jsx";
 import Explore from "./customer/pages/Explore.jsx";
 import Login from "./customer/pages/Login.jsx";
 import Signup from "./customer/pages/Signup.jsx";
+import Payment from "./customer/pages/payment.jsx";
 import { ShopProvider } from "./customer/context/useShop";
 import ProductDetail from "./customer/pages/ProductDetail.jsx";
 import Wishlist from "./customer/pages/Wishlist.jsx";
@@ -66,6 +67,10 @@ const router = createBrowserRouter([
       {
         path: "cart",
         element: <Cart />,
+      },
+      {
+        path: "payment",
+        element: <Payment />,
       },
     ],
   },

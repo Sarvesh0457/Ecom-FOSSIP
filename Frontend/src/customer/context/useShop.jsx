@@ -12,6 +12,7 @@ import {
   getWishlistApi,
   removeWishlistApi,
 } from "../api/wishlist.api";
+import { useAuth } from "./AuthContext";
 
 const ShopContext = createContext();
 
@@ -19,11 +20,17 @@ export const ShopProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
   const [wishlistItems, setWishlistItems] = useState([]);
 
+  const { user } = useAuth();
+
   useEffect(() => {
-    loadWishlist();
-  }, []);
+    if (user) {
+      loadWishlist();
+    }
+  }, [user]);
 
   const loadWishlist = async () => {
+    if (!user) return;
+
     try {
       const res = await getWishlistApi();
       setWishlistItems(res.data.data);
@@ -68,6 +75,8 @@ export const ShopProvider = ({ children }) => {
 
   // FETCH CART
   const fetchCart = async () => {
+    if (!user) return;
+
     try {
       const res = await getCartApi();
       setCartItems(res.data.data || []);
@@ -77,8 +86,10 @@ export const ShopProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    fetchCart();
-  }, []);
+    if (user) {
+      fetchCart();
+    }
+  }, [user]);
 
   // ADD TO CART
   const addToCart = async (product, size, color) => {

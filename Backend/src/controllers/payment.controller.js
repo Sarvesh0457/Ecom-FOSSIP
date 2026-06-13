@@ -8,20 +8,63 @@ import { asyncHandler } from "../utils/async-handler.js";
 
 // CREATE RAZORPAY ORDER
 
+// const createPaymentOrder = asyncHandler(async (req, res) => {
+//   const { amount } = req.body;
+
+//   if (!amount || amount <= 0) {
+//     throw new ApiError(400, "Valid amount is required");
+//   }
+
+//   const options = {
+//     amount: amount * 100, // rupees → paise
+//     currency: "INR",
+//     receipt: `receipt_${Date.now()}`,
+//   };
+
+//   const order = await razorpay.orders.create(options);
+
+//   return res
+//     .status(200)
+//     .json(new ApiResponse(200, order, "Payment order created successfully"));
+// });
+
 const createPaymentOrder = asyncHandler(async (req, res) => {
+  console.log("====== INSIDE createPaymentOrder ======");
+  console.log("req.user =", req.user);
+
   const { amount } = req.body;
+
+  console.log("amount =", amount);
 
   if (!amount || amount <= 0) {
     throw new ApiError(400, "Valid amount is required");
   }
 
   const options = {
-    amount: amount * 100, // rupees → paise
+    amount: amount * 100,
     currency: "INR",
     receipt: `receipt_${Date.now()}`,
   };
 
-  const order = await razorpay.orders.create(options);
+  try {
+    console.log("Creating Razorpay order...");
+    const order = await razorpay.orders.create(options);
+
+    console.log("Order created successfully");
+    console.log(order);
+
+    return res
+      .status(200)
+      .json(new ApiResponse(200, order, "Payment order created successfully"));
+  } catch (error) {
+    console.log("FULL ERROR:");
+    console.dir(error, { depth: null });
+
+    throw error;
+  }
+
+  console.log("Order created successfully");
+  console.log(order);
 
   return res
     .status(200)

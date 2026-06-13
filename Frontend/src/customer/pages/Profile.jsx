@@ -14,7 +14,13 @@ const Profile = () => {
   const [form, setForm] = useState({
     fullName: "",
     phoneNumber: "",
-    address: "",
+    address: {
+      street: "",
+      city: "",
+      state: "",
+      country: "",
+      pincode: "",
+    },
   });
 
   const [otp, setOtp] = useState("");
@@ -36,7 +42,13 @@ const Profile = () => {
       setForm({
         fullName: data.fullName || "",
         phoneNumber: data.phoneNumber || "",
-        address: data.address || "",
+        address: {
+          street: data.address?.street || "",
+          city: data.address?.city || "",
+          state: data.address?.state || "",
+          country: data.address?.country || "",
+          pincode: data.address?.pincode || "",
+        },
       });
 
       // if phone already exists → allow OTP
@@ -49,7 +61,21 @@ const Profile = () => {
   };
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+
+    if (name.startsWith("address.")) {
+      const key = name.split(".")[1];
+      setForm({
+        ...form,
+        address: {
+          ...form.address,
+          [key]: value,
+        },
+      });
+      return;
+    }
+
+    setForm({ ...form, [name]: value });
   };
 
   // 👤 STEP 1: UPDATE PROFILE FIRST
@@ -177,12 +203,41 @@ const Profile = () => {
         )}
 
         {/* ADDRESS */}
-        <textarea
-          name="address"
-          value={form.address}
-          onChange={handleChange}
-          placeholder="Address"
-        />
+        <div className="address-group">
+          <h3>Address</h3>
+          <div className="address-grid">
+            <input
+              name="address.street"
+              value={form.address.street}
+              onChange={handleChange}
+              placeholder="Street"
+            />
+            <input
+              name="address.city"
+              value={form.address.city}
+              onChange={handleChange}
+              placeholder="City"
+            />
+            <input
+              name="address.state"
+              value={form.address.state}
+              onChange={handleChange}
+              placeholder="State"
+            />
+            <input
+              name="address.country"
+              value={form.address.country}
+              onChange={handleChange}
+              placeholder="Country"
+            />
+            <input
+              name="address.pincode"
+              value={form.address.pincode}
+              onChange={handleChange}
+              placeholder="Pincode"
+            />
+          </div>
+        </div>
 
         {/* DELETE */}
         <button className="delete-btn" onClick={deleteAccount}>

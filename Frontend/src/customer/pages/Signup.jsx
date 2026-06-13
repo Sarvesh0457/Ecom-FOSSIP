@@ -26,6 +26,8 @@ const Signup = () => {
     }));
   };
 
+  const [successMessage, setSuccessMessage] = useState("");
+
   const handleRegister = async () => {
     setError("");
 
@@ -42,27 +44,22 @@ const Signup = () => {
     try {
       setLoading(true);
 
-      const res = await registerUser(formData);
+      await registerUser(formData);
 
-      console.log(res.data);
+      setSuccessMessage(
+        "Registration successful! Please check your email for verification.",
+      );
 
-      // If your backend returns token and user
-      const user = res.data?.data?.user;
-      const token = res.data?.data?.accessToken;
-
-      if (user && token) {
-        login(user, token);
-      }
-
-      navigate("/");
+      setFormData({
+        username: "",
+        email: "",
+        password: "",
+        role: "user",
+      });
     } catch (err) {
-      console.log(err.response?.data);
-
       setError(
         err.response?.data?.message || "Signup failed. Please try again.",
       );
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -118,6 +115,8 @@ const Signup = () => {
         </div>
 
         {error && <p className="error-text">{error}</p>}
+
+        {successMessage && <p className="success-text">{successMessage}</p>}
 
         <button
           className="continue-btn"

@@ -61,14 +61,19 @@ const createOrder = asyncHandler(async (req, res) => {
     totalAmount += item.product.price * item.quantity;
   }
 
+  const { paymentId, razorpayOrderId } = req.body;
+
   const order = await Order.create({
     user: req.user._id,
-
     items: orderItems,
-
     totalAmount,
-
     shippingAddress: user.address,
+
+    paymentId,
+    razorpayOrderId,
+
+    paymentStatus: "paid",
+    orderStatus: "confirmed",
   });
 
   await Cart.deleteMany({

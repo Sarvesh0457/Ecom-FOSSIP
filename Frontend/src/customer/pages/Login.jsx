@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import "./Login.css";
 import banner from "../Assets/banner.png";
 import { loginApi } from "../api/auth.js";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const { login } = useAuth();
@@ -72,16 +72,23 @@ const Login = () => {
           <img src={banner} alt="Online Shopping" />
         </div>
 
-        <div className="login-content">
+        <form
+          className="login-content"
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleLogin();
+          }}
+        >
           <h2>Login</h2>
 
           <div className="email-input">
             <input
-              type="text"
+              type="email"
               name="email"
-              placeholder="email"
+              placeholder="Email"
               value={formData.email}
               onChange={handleChange}
+              autoComplete="email"
             />
           </div>
 
@@ -92,23 +99,26 @@ const Login = () => {
             className="password-input"
             value={formData.password}
             onChange={handleChange}
+            autoComplete="current-password"
           />
 
           {error && <p className="error-text">{error}</p>}
           {success && <p className="success-text">{success}</p>}
 
-          <button
-            className="continue-btn"
-            onClick={handleLogin}
-            disabled={loading}
-          >
+          <button className="continue-btn" type="submit" disabled={loading}>
             {loading ? "Logging in..." : "Continue"}
           </button>
 
           <div className="help-text">
             Having trouble to get login ? <span>Get help</span>
           </div>
-        </div>
+          <div className="signup-link">
+            Don't have an account?{" "}
+            <Link to="/signup" className="signup-anchor">
+              Sign up
+            </Link>
+          </div>
+        </form>
       </div>
     </div>
   );

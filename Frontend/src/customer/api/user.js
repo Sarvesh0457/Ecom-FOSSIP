@@ -1,16 +1,9 @@
-import axios from "axios";
+import API from "./axiosClient";
 
-const API = axios.create({
-  baseURL: "http://localhost:5000/api/v1",
-  withCredentials: true,
-});
-
-// Get logged-in user----------
 export const getCurrentUser = () => {
-  return API.post("/auth/current-user");
+  return API.get("/users/me");
 };
 
-// LOGOUT (optional but useful later)=---
 export const logoutUser = () => {
   return API.post("/auth/logout");
 };
